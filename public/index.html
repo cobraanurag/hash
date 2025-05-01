@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Password Hasher</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        input, button { padding: 10px; margin-top: 10px; width: 100%; }
+        #result { margin-top: 20px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <h2>Password Hashing Tool</h2>
+    <input type="password" id="password" placeholder="Enter password" />
+    <button onclick="hashPassword()">Hash Password</button>
+    <div id="result"></div>
+
+    <script>
+        async function hashPassword() {
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+
+            if (!password) {
+                resultDiv.textContent = "Please enter a password.";
+                return;
+            }
+
+            const response = await fetch('/hash', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+
+            const data = await response.json();
+            resultDiv.textContent = data.hashed || data.error;
+        }
+    </script>
+</body>
+</html>
